@@ -1,8 +1,8 @@
 <template lang="pug">
     li.todos__item.items-center
-        checkbox(:value="todo.done" @input="$emit('toggle', $event)") {{ todo.description }}
+        checkbox(:value="todo.done" @input="toggle(todo._id, $event)") {{ todo.description }}
             template(#caption) {{ humanizeDate(todo.updatedAt) }}
-        action-button(rotate @click="$emit('remove', todo._id)")
+        action-button(rotate @click="remove(todo._id)")
 </template>
 
 <script lang="ts">
@@ -15,7 +15,7 @@ import Checkbox from './Checkbox.vue';
 export default defineComponent({
   name: 'Todo',
   components: { Checkbox, ActionButton },
-  props: ['todo', 'index'],
+  props: ['todo', 'index', 'toggle', 'remove'],
   methods: {
     humanizeDate: (date: string): string | null => DateTime.fromISO(date).toRelative(),
   },

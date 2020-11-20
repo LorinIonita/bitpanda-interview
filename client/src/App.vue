@@ -17,8 +17,8 @@
                     :todo="todo"
                     :index="index"
                     :key="index"
-                    @toggle="toggleTodo(todo._id, $event)"
-                    @remove="removeTodo"
+                    :toggle="toggleTodo"
+                    :remove="removeTodo"
                 )
         .errors(v-if="apiErrors") {{ apiErrors }}
             action-button.errors__close(rotate dark @click="clearApiErrors")
@@ -31,6 +31,9 @@ import {
 
 import ActionButton from './components/ActionButton.vue';
 import Todo from './components/Todo.vue';
+import {
+  read, create, remove, update,
+} from './use/fetch';
 
 interface TodoInterface {
   _id: string;
@@ -58,7 +61,7 @@ export default defineComponent({
     const fetchTodos = async (): Promise<void> => {
       try {
         todos.value = (
-          await fetch('http://localhost:3000/api/v1/todo').then((resp) => resp.json())
+            await read('http://localhost:3000/api/v1/todo').then((resp) => resp.json())
         ) as TodoInterface[];
       } catch (e) {
         apiErrors.value = e as string;
@@ -68,13 +71,7 @@ export default defineComponent({
     const addTodo = async (): Promise<void> => {
       if (todo.description) {
         try {
-          await fetch('http://localhost:3000/api/v1/todo', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(todo),
-          });
+          await create('http://localhost:3000/api/v1/todo', todo);
         } catch (e) {
           apiErrors.value = e as string;
         }
@@ -88,9 +85,7 @@ export default defineComponent({
 
     const removeTodo = async (identifier: string): Promise<void> => {
       try {
-        await fetch(`http://localhost:3000/api/v1/todo/${identifier}`, {
-          method: 'DELETE',
-        });
+        await remove('http://localhost:3000/api/v1/todo', identifier);
       } catch (e) {
         apiErrors.value = e as string;
       }
@@ -100,14 +95,8 @@ export default defineComponent({
 
     const toggleTodo = async (todoID: string, toggled: boolean): Promise<void> => {
       try {
-        await fetch(`http://localhost:3000/api/v1/todo/${todoID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            done: toggled,
-          }),
+        await update('http://localhost:3000/api/v1/todo', todoID, {
+          done: toggled,
         });
       } catch (e) {
         apiErrors.value = e as string;
