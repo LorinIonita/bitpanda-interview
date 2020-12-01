@@ -1,6 +1,6 @@
 @import "variables";
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
@@ -11,10 +11,9 @@ html {
 
 body {
   @extend html;
-  background: $background;
+  background: $primary-background;
   font-family: 'Roboto', sans-serif;
   margin: 0;
-  font-size: 16px;
 }
 
 .items-center {

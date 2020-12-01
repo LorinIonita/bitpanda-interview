@@ -1,12 +1,12 @@
 <template lang="pug">
     li.todos__item.items-center
         checkbox(:value="todo.done" @input="toggle(todo._id, $event)") {{ todo.description }}
-            template(#caption) {{ humanizeDate(todo.updatedAt) }}
+            template(#caption) {{ humanizedDate }}
         action-button(rotate @click="remove(todo._id)")
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, ref, watchEffect } from '@vue/composition-api';
 import { DateTime } from 'luxon';
 
 import ActionButton from './ActionButton.vue';
@@ -16,15 +16,32 @@ export default defineComponent({
   name: 'Todo',
   components: { Checkbox, ActionButton },
   props: ['todo', 'index', 'toggle', 'remove'],
-  methods: {
-    humanizeDate: (date: string): string | null => DateTime.fromISO(date).toRelative(),
+  setup(props) {
+    let { updatedAt } = props.todo as Record<string, string>;
+    const humanizeDate = (date: string): string | null => DateTime.fromISO(date).toRelative();
+    const humanizedDate = ref(humanizeDate(updatedAt));
+
+    watchEffect(() => {
+      updatedAt = (props.todo as Record<string, string>).updatedAt;
+      humanizedDate.value = humanizeDate(updatedAt);
+    });
+
+    setInterval(() => {
+      humanizedDate.value = humanizeDate(updatedAt);
+    }, 5000);
+
+    return {
+      humanizedDate,
+    };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+@import "src/styles/variables";
+
 .todos__item {
-    border-top: 0.0625rem solid #C6C6C6;
+    border-top: $default-border-width solid $border-color;
     min-height: 3.125rem;
     padding: 0 1.125rem;
     font-weight: 200;

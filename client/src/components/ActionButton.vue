@@ -19,14 +19,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "src/styles/variables";
+
 .action-button {
     font-size: 1.8rem;
     font-weight: 200;
-    color: #A8A8A8;
+    color: $app-light;
     cursor: pointer;
     display: flex;
-    width: 30px;
-    height: 30px;
+    width: 1.875rem;
+    height: 1.875rem;
     justify-content: center;
     align-items: center;
     transition: all 0.2s ease-in-out;
@@ -37,7 +39,7 @@ export default {
         }
 
         &--dark-background {
-            color: white;
+            color: $primary-on-dark;
         }
     }
 }
