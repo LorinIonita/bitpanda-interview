@@ -6,7 +6,7 @@
         span.label__container
             span.label
                 slot
-            span.checkbox__caption -&nbsp;
+            span.label__caption -&nbsp;
                 slot(name="caption")
 </template>
 
@@ -52,12 +52,6 @@ export default {
         }
     }
 
-    &__caption {
-        font-size: 0.625rem;
-        color: $primary-on-light;
-        margin-left: 0.5rem;
-    }
-
     &--checked {
         #{$self}__checkmark {
             &::after {
@@ -72,7 +66,15 @@ export default {
     }
 }
 
-.label__container {
-    text-align: left;
+.label {
+    &__container {
+        text-align: left;
+    }
+
+    &__caption {
+        font-size: 0.625rem;
+        color: $primary-on-light;
+        margin-left: 0.5rem;
+    }
 }
 </style>
