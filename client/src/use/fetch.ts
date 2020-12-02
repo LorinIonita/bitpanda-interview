@@ -8,7 +8,7 @@ export const create = async <T>(url: string, data: Record<string, unknown>): Pro
   });
 
   if (resp.ok) {
-    return <Promise<T>>resp.json();
+    return <T>(await resp.json());
   }
 
   throw new Error('An generic error has been encountered');
@@ -18,7 +18,7 @@ export const read = async <T>(url: string): Promise<T> => {
   const resp = await fetch(url);
 
   if (resp.ok) {
-    return <Promise<T>>resp.json();
+    return <T>(await resp.json());
   }
 
   throw new Error('An generic error has been encountered');
@@ -46,7 +46,7 @@ export const update = async <T>(
   });
 
   if (resp.ok) {
-    return <Promise<T>>resp.json();
+    return <T>(await resp.json());
   }
 
   throw new Error('An generic error has been encountered');
